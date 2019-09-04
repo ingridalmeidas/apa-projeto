@@ -6,28 +6,21 @@ def le_instancia(nome):
 	linhas = arq.readlines()		#le as linhas do arquivo
 	
 	for i in range(len(linhas)):
-		
-		print(i, linhas[i])
 	
 		linha_quebrada = linhas[i].split()	#quebra primeira linha
 		
 		if len(linha_quebrada) > 0:
 			if linha_quebrada[0] == "DIMENSION:":
 				dimensao = int(linha_quebrada[1])
-				print("dimensao: ", dimensao)
 		
 			elif linha_quebrada[0] == "VEHICLES:":
 				qtd_veiculos = int(linha_quebrada[1])
-				print("veículos: " , qtd_veiculos)
 		
 			elif linha_quebrada[0] == "CAPACITY:":
 				capacidade = int(linha_quebrada[1])
-				print("capacidade: " , capacidade)
 			
 			elif linha_quebrada[0] == "DEMAND_SECTION:":
 				lista_demandas = demand_section(linhas, i+1, dimensao)
-				print("demandas: ")
-				print(lista_demandas)
 		
 			elif linha_quebrada[0] == "EDGE_WEIGHT_SECTION":
 			
@@ -42,8 +35,6 @@ def demand_section(linhas, j, dimensao):
 	lista_demandas = []
 	
 	for i in range(j, j+dimensao):
-		
-		print(i, linhas[i])
 		
 		linha_quebrada = linhas[i].split()
 		
@@ -70,6 +61,4 @@ def edge_weight_section(linhas, j, dimensao):
 	return matriz_distancias
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-print(le_instancia("instancias_teste/P-n45-k5.txt"))
 
