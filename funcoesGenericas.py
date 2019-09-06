@@ -25,7 +25,7 @@ def le_instancia(nome):
 			elif linha_quebrada[0] == "EDGE_WEIGHT_SECTION":
 			
 				matriz_distancias = edge_weight_section(linhas, i+1, dimensao)
-				
+
 	return dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias 
 	
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -61,4 +61,11 @@ def edge_weight_section(linhas, j, dimensao):
 	return matriz_distancias
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
+# calcula o caminho total percorrido
+def total_percorrido(lista_de_rotas, matriz_de_distancias):
+	total = 0
+	for rota in lista_de_rotas:
+		for local in range(len(rota)-1):
+			total = total + matriz_de_distancias[rota[local]][rota[local+1]]
+	
+	return total

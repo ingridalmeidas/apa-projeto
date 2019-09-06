@@ -1,13 +1,14 @@
 import funcoesGenericas
+from metaheuristicas import *
 import math
 
 def main():
-
-	dimensao = 0
-	qtd_veiculos = 0
-	capacidade = 0
-	lista_demandas = []
-	matriz_distancias = []
+	# Dados da instância
+	dimensao = 0 # Quantidade de demandas
+	qtd_veiculos = 0 # Quantidade de veículos
+	capacidade = 0 # Capacidade dos veículos
+	lista_demandas = [] # Lista com o valor de todas as demandas
+	matriz_distancias = [] # Lista com as referências das distâncias
 	
 	dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias = funcoesGenericas.le_instancia("instancias_teste/P-n19-k2.txt")
 	
@@ -71,7 +72,17 @@ def construcao(dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distan
 		capacidade_atual = 0
 		
 	for i in range(len(rota_veiculos)):
-		print(rota_veiculos[i])
+		print("rota {0}: {1}".format(i,rota_veiculos[i]))
+	print("distância total percorrida: {0}".format(funcoesGenericas.\
+							total_percorrido(rota_veiculos,matriz_distancias)))
+	
+	nova_rota = vnd(rota_veiculos,lista_demandas,matriz_distancias,capacidade)
+	
+	print("Após realizar alteração")
+	for i in range(len(rota_veiculos)):
+    		print("rota {0}: {1}".format(i,nova_rota[i]))
+	print("distância total percorrida: {0}".format(funcoesGenericas.\
+							total_percorrido(rota_veiculos,matriz_distancias)))
 			
 			
 		
