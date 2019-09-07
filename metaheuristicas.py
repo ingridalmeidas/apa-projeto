@@ -6,7 +6,6 @@ MAXIMO = 3
 
 def vnd(lista_de_rotas,lista_de_demandas,matriz_de_distancias,capacidade):
 	rota_melhorada = None # salgvará as novas rotas
-	teve_melhoria = True # flag que avisa se teve melhoria
 	sucesso = False
 	total_atual = funcoesGenericas.total_percorrido(lista_de_rotas,matriz_de_distancias)
 	k = 1
@@ -28,7 +27,6 @@ def vnd(lista_de_rotas,lista_de_demandas,matriz_de_distancias,capacidade):
 															< total_atual):
 			print("entrou aqui! {0} {1}".format(total_atual,funcoesGenericas.total_percorrido(rota_melhorada,matriz_de_distancias)))
 			lista_de_rotas = copy.deepcopy(rota_melhorada)
-			teve_melhoria = True
 			sucesso = True
 			k = 1
 		else:
