@@ -85,6 +85,7 @@ def vizinhanca_2(lista_de_rotas,lista_de_demandas, capacidade):
     contador_de_tentativas = 0 
                             
     while(repetir):
+        repetir = 0
         # Seleciona randomicamente um indice a ser trocado
         indice_selecionado = random.randrange(1,tam_menor_rota-1)
         
@@ -107,7 +108,7 @@ def vizinhanca_2(lista_de_rotas,lista_de_demandas, capacidade):
             for cliente in rota:
                 temp = temp + lista_de_demandas[cliente]
             if(temp > capacidade):
-                repetir = 0
+                repetir = 1
                 break
             temp = 0
         contador_de_tentativas = contador_de_tentativas +1
@@ -153,6 +154,7 @@ def vizinhanca_3(lista_de_rotas,lista_de_demandas, matriz_de_distancias, \
 
     contador_de_tentativas = 0
     while(repetir):
+        repetir = 0
         # Seleciona randomicamente um indice a ser trocado
         indice_selecionado_1 = random.randrange(1,tam_rota_1-1)
         indice_selecionado_2 = random.randrange(1,tam_rota_2-1)
@@ -176,7 +178,7 @@ def vizinhanca_3(lista_de_rotas,lista_de_demandas, matriz_de_distancias, \
             for cliente in rota:
                 temp = temp + lista_de_demandas[cliente]
             if(temp > capacidade):
-                repetir = 0
+                repetir = 1
                 break
             temp = 0
         contador_de_tentativas = contador_de_tentativas +1
