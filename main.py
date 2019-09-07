@@ -11,7 +11,7 @@ def main():
 	matriz_distancias = [] # Lista com as referências das distâncias
 	
 	dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias = \
-				  funcoesGenericas.le_instancia("instancias_teste/P-n55-k7.txt")
+				  funcoesGenericas.le_instancia("instancias_teste/P-n19-k2.txt")
 	
 	construcao(dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias)
 	
