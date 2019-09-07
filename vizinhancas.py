@@ -29,12 +29,12 @@ def vizinhanca_1(lista_de_rotas):
     tam_rota = len(rotas_melhoradas[indice_rota])
 
     # Seleciona os indices que serão alterados
-    indice_selecionado_1 = random.randrange(1,tam_rota)
-    indice_selecionado_2 = random.randrange(1,tam_rota)
+    indice_selecionado_1 = random.randrange(1,tam_rota-1)
+    indice_selecionado_2 = random.randrange(1,tam_rota-1)
     # Seleciona randomicamente um indice a ser trocado
-    while(indice_selecionado_1 == indice_selecionado_2):
-        indice_selecionado_1 = random.randrange(1,tam_rota)
-        indice_selecionado_2 = random.randrange(1,tam_rota)
+    while(indice_selecionado_1 == indice_selecionado_2 and tam_rota != 3):
+        indice_selecionado_1 = random.randrange(1,tam_rota-1)
+        indice_selecionado_2 = random.randrange(1,tam_rota-1)
     
     # realiza a troca
     # salva o local que será tirado da rota 1
@@ -67,10 +67,10 @@ def vizinhanca_2(lista_de_rotas,lista_de_demandas, capacidade):
     rotas_melhoradas = copy.deepcopy(lista_de_rotas) 
     
     # Variáveis que armazenarão as rotas
-    indice_rota_1 = 0
-    indice_rota_2 = 0
+    indice_rota_1 = random.randrange(0,len(rotas_melhoradas))
+    indice_rota_2 = random.randrange(0,len(rotas_melhoradas))
     # Impede que selecionem a mesma rota para ambas as variáveis
-    while(indice_rota_1 == indice_rota_2):
+    while(indice_rota_1 == indice_rota_2 and len(rotas_melhoradas) > 1):
         indice_rota_1 = random.randrange(0,len(rotas_melhoradas))
         indice_rota_2 = random.randrange(0,len(rotas_melhoradas))
 
@@ -81,9 +81,12 @@ def vizinhanca_2(lista_de_rotas,lista_de_demandas, capacidade):
                                 < len(rotas_melhoradas[indice_rota_2])) \
                         else len(rotas_melhoradas[indice_rota_2])
     repetir = 1
+    # sem sucesso seleciona uma outra rota
+    contador_de_tentativas = 0 
+                            
     while(repetir):
         # Seleciona randomicamente um indice a ser trocado
-        indice_selecionado = random.randrange(1,tam_menor_rota)
+        indice_selecionado = random.randrange(1,tam_menor_rota-1)
         
         # realiza a troca
         # salva o local que será tirado da rota 1
@@ -91,24 +94,103 @@ def vizinhanca_2(lista_de_rotas,lista_de_demandas, capacidade):
         
         # Substitui esse valor por seu correspondente na rota 2
         rotas_melhoradas[indice_rota_1][indice_selecionado] = \
-                                rotas_melhoradas[indice_rota_2][indice_selecionado]
+                            rotas_melhoradas[indice_rota_2][indice_selecionado]
 
         # Substitui o da rota 2 pelo retirado da rota 1
         rotas_melhoradas[indice_rota_2][indice_selecionado] = temp
 
         #Verifica se a nova rota se encontra dentro da capacidade máxima
         temp = 0 # reaproveitando temp
-
-        for rota in rotas_melhoradas:
+        
+        for rota in [rotas_melhoradas[indice_rota_1],\
+                        rotas_melhoradas[indice_rota_2]]:
             for cliente in rota:
                 temp = temp + lista_de_demandas[cliente]
             if(temp > capacidade):
                 repetir = 0
                 break
             temp = 0
-
+        contador_de_tentativas = contador_de_tentativas +1
+        if(contador_de_tentativas > 100):
+            contador_de_tentativas = 0
+            # Variáveis que armazenarão as rotas
+            indice_rota_1 = random.randrange(0,len(rotas_melhoradas))
+            indice_rota_2 = random.randrange(0,len(rotas_melhoradas))
+            # Impede que selecionem a mesma rota para ambas as variáveis
+            while(indice_rota_1 == indice_rota_2 and len(rotas_melhoradas) > 1):
+                indice_rota_1 = random.randrange(0,len(rotas_melhoradas))
+                indice_rota_2 = random.randrange(0,len(rotas_melhoradas))
+            tam_menor_rota = len(rotas_melhoradas[indice_rota_1]) \
+                        if (len(rotas_melhoradas[indice_rota_1]) \
+                                < len(rotas_melhoradas[indice_rota_2])) \
+                        else len(rotas_melhoradas[indice_rota_2])
     # Retorna a nova rota
     return rotas_melhoradas
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-def vizinhanca_3(lista_de_rotas,lista_de_demandas, capacidade):
-    return lista_de_rotas
+
+# Esta vizinhança é semelhante a vizinhança 2 porém a troca feita é entre 2
+# locais selecionados aleatoriamente
+def vizinhanca_3(lista_de_rotas,lista_de_demandas, matriz_de_distancias, \
+                                                                    capacidade):
+    # a nova rota gerada será armazenada aqui
+    # Uma copia é criada para evitar alterar a rota original
+    # Para caso nenhuma solução melhor ser encontrada
+    rotas_melhoradas = copy.deepcopy(lista_de_rotas) 
+    
+    # Variáveis que armazenarão as rotas
+    indice_rota_1 = random.randrange(0,len(rotas_melhoradas))
+    indice_rota_2 = random.randrange(0,len(rotas_melhoradas))
+    # Impede que selecionem a mesma rota para ambas as variáveis
+    while(indice_rota_1 == indice_rota_2 and len(rotas_melhoradas)):
+        indice_rota_1 = random.randrange(0,len(rotas_melhoradas))
+        indice_rota_2 = random.randrange(0,len(rotas_melhoradas))
+
+    # Descobre qual o valor da menor rota para evitar indices fora das
+    #  rotas selecionadas
+    tam_rota_1 = len(rotas_melhoradas[indice_rota_1])
+    tam_rota_2 = len(rotas_melhoradas[indice_rota_2])
+    repetir = 1
+
+    contador_de_tentativas = 0
+    while(repetir):
+        # Seleciona randomicamente um indice a ser trocado
+        indice_selecionado_1 = random.randrange(1,tam_rota_1-1)
+        indice_selecionado_2 = random.randrange(1,tam_rota_2-1)
+        
+        # realiza a troca
+        # salva o local que será tirado da rota 1
+        temp = rotas_melhoradas[indice_rota_1][indice_selecionado_1]
+        
+        # Substitui esse valor por seu correspondente na rota 2
+        rotas_melhoradas[indice_rota_1][indice_selecionado_1] = \
+                        rotas_melhoradas[indice_rota_2][indice_selecionado_2]
+
+        # Substitui o da rota 2 pelo retirado da rota 1
+        rotas_melhoradas[indice_rota_2][indice_selecionado_2] = temp
+
+        #Verifica se a nova rota se encontra dentro da capacidade máxima
+        temp = 0 # reaproveitando temp
+        contador_de_tentativas = contador_de_tentativas  + 1
+        for rota in [rotas_melhoradas[indice_rota_1],\
+                        rotas_melhoradas[indice_rota_2]]:
+            for cliente in rota:
+                temp = temp + lista_de_demandas[cliente]
+            if(temp > capacidade):
+                repetir = 0
+                break
+            temp = 0
+        contador_de_tentativas = contador_de_tentativas +1
+        if(contador_de_tentativas > 100):
+            contador_de_tentativas = 0
+            # Variáveis que armazenarão as rotas
+            indice_rota_1 = random.randrange(0,len(rotas_melhoradas))
+            indice_rota_2 = random.randrange(0,len(rotas_melhoradas))
+            # Impede que selecionem a mesma rota para ambas as variáveis
+            while(indice_rota_1 == indice_rota_2 and len(rotas_melhoradas) > 1):
+                indice_rota_1 = random.randrange(0,len(rotas_melhoradas))
+                indice_rota_2 = random.randrange(0,len(rotas_melhoradas))
+            tam_rota_1 = len(rotas_melhoradas[indice_rota_1])
+            tam_rota_2 = len(rotas_melhoradas[indice_rota_2])
+
+    # Retorna a nova rota
+    return rotas_melhoradas

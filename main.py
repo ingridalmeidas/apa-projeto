@@ -10,7 +10,8 @@ def main():
 	lista_demandas = [] # Lista com o valor de todas as demandas
 	matriz_distancias = [] # Lista com as referências das distâncias
 	
-	dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias = funcoesGenericas.le_instancia("instancias_teste/P-n19-k2.txt")
+	dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias = \
+				  funcoesGenericas.le_instancia("instancias_teste/P-n55-k7.txt")
 	
 	construcao(dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias)
 	
@@ -70,29 +71,27 @@ def construcao(dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distan
 		rota = []
 		local_atual = 0
 		capacidade_atual = 0
-		
+
+	sucesso = False
+	while(not sucesso):	
+		nova_rota,sucesso = vnd(rota_veiculos,lista_demandas,matriz_distancias,capacidade)
+		print("Tentando...\n")
+	
 	for i in range(len(rota_veiculos)):
 		print("rota {0}: {1}".format(i,rota_veiculos[i]))
-	print("distância total percorrida: {0}".format(funcoesGenericas.\
+	print("distância total percorrida: {0}\n".format(funcoesGenericas.\
 							total_percorrido(rota_veiculos,matriz_distancias)))
-	
-	nova_rota = vnd(rota_veiculos,lista_demandas,matriz_distancias,capacidade)
 	
 	print("Após realizar alteração")
 	for i in range(len(rota_veiculos)):
-    		print("rota {0}: {1}".format(i,nova_rota[i]))
-	print("distância total percorrida: {0}".format(funcoesGenericas.\
-							total_percorrido(rota_veiculos,matriz_distancias)))
-			
-			
-		
-		
-			
-			
-	
-		
-			
-		
-	
+			print("rota {0}: {1}".format(i,nova_rota[i]))
+	print("distância total percorrida: {0}\n\n".format(funcoesGenericas.\
+							total_percorrido(nova_rota,matriz_distancias)))
+
+
+
+
+
+
 
 main()
