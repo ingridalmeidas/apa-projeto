@@ -11,7 +11,7 @@ def main():
 	matriz_distancias = [] # Lista com as referências das distâncias
 	
 	dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias = \
-				  funcoesGenericas.le_instancia("instancias_teste/P-n51-k10.txt")
+				  funcoesGenericas.le_instancia("instancias_teste/P-n23-k8.txt")
 	
 	construcao(dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias)
 	
@@ -72,6 +72,8 @@ def construcao(dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distan
 		local_atual = 0
 		capacidade_atual = 0
 
+	print("Distância inicial: ", funcoesGenericas.total_percorrido(rota_veiculos,matriz_distancias))
+	
 	sucesso = False
 	while(not sucesso):	
 		nova_rota,sucesso = vnd(rota_veiculos,lista_demandas,matriz_distancias,capacidade)

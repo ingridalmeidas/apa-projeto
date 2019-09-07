@@ -172,7 +172,7 @@ def vizinhanca_3(lista_de_rotas,lista_de_demandas, matriz_de_distancias, \
 
         #Verifica se a nova rota se encontra dentro da capacidade máxima
         temp = 0 # reaproveitando temp
-        contador_de_tentativas = contador_de_tentativas  + 1
+
         for rota in [rotas_melhoradas[indice_rota_1],\
                         rotas_melhoradas[indice_rota_2]]:
             for cliente in rota:
@@ -196,3 +196,47 @@ def vizinhanca_3(lista_de_rotas,lista_de_demandas, matriz_de_distancias, \
 
     # Retorna a nova rota
     return rotas_melhoradas
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+# Recebe a lista de rotas  e então verifica se é possível encontrar uma rota 
+# melhor dentro da lista.
+# Nesta vizinhança são executadas trocas entre duas posições consecutivas de uma mesma rota
+# qualquer
+# Ex:
+#    [ 1, 2, 3, 4] --> [1,2,4,3]
+# Parametros:
+# lista_de_rotas - Lista com as rotas definidas com a heuristica inicial
+
+def vizinhanca_4(lista_de_rotas):
+
+    # a nova rota gerada será armazenada aqui
+    # Uma copia é criada para evitar alterar a rota original
+    # Para caso nenhuma solução melhor ser encontrada
+    rotas_melhoradas = copy.deepcopy(lista_de_rotas) 
+    
+    # Seleciona a rota que será alterada
+    indice_rota = random.randrange(0,len(rotas_melhoradas))
+    
+    while(len(rotas_melhoradas[indice_rota]) <= 3):
+        indice_rota = random.randrange(0,len(rotas_melhoradas))
+
+    # Pega o tamanho da rota
+    tam_rota = len(rotas_melhoradas[indice_rota])
+    print("Tamanho: ", tam_rota)
+    
+    #Seleciona um indice
+    indice_selecionado = random.randrange(1,tam_rota-2)
+    
+    # realiza a troca
+    # salva o local que será tirado da rota 1
+    temp = rotas_melhoradas[indice_rota][indice_selecionado]
+    
+    # Substitui esse valor por seu correspondente
+    rotas_melhoradas[indice_rota][indice_selecionado] = rotas_melhoradas[indice_rota][indice_selecionado + 1]
+
+    # Substitui o da rota 2 pelo retirado da rota 1
+    rotas_melhoradas[indice_rota][indice_selecionado + 1] = temp
+
+    # Retorna a nova rota
+    return rotas_melhoradas
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
