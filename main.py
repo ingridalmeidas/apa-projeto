@@ -1,6 +1,8 @@
 import funcoesGenericas
 from metaheuristicas import *
 import math
+from statistics import mean
+import time
 
 def main():
 
@@ -11,14 +13,67 @@ def main():
 	lista_demandas = [] # Lista com o valor de todas as demandas
 	matriz_distancias = [] # Lista com as referências das distâncias
 	
+	solucoes_construcao = []
+	tempos_construcao = []
+	solucoes_vnd = []
+	tempos_vnd = []
+	solucoes_metaheuristica = []
+	tempos_metaheuristica = []
+	
 	dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias = \
-				  funcoesGenericas.le_instancia("instancias_teste/P-n23-k8.txt")
+				  funcoesGenericas.le_instancia("instancias_teste/P-n19-k2.txt")
 	
-	#rota_veiculos = construcao_gulosa_distancia(dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias)
-	rota_veiculos = construcao_gulosa_razao(dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias)
-	#rota_veiculos = construcao_extra(dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias)
+	for i in range(10):
+		
+		inicio = time.time()
+		rota_veiculos = construcao_gulosa_razao(dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias)
+		fim = time.time()
+		
+		solucoes_construcao.append(funcoesGenericas.total_percorrido(rota_veiculos,matriz_distancias))
+		tempos_construcao.append(fim - inicio)
+		
+		inicio = time.time()
+		nova_rota = busca_local(rota_veiculos, lista_demandas, matriz_distancias, capacidade)
+		fim = time.time()
+		
+		
+		solucoes_vnd.append(funcoesGenericas.total_percorrido(nova_rota,matriz_distancias))
+		tempos_vnd.append(fim - inicio)
+		
+		inicio = time.time()
+		nova_rota_2 = metaheuristica(nova_rota, lista_demandas, matriz_distancias, capacidade)
+		fim = time.time()
+		
+		solucoes_metaheuristica.append(funcoesGenericas.total_percorrido(nova_rota_2,matriz_distancias))
+		tempos_metaheuristica.append(fim - inicio)
+		
 	
-	#busca_local(rota_veiculos, lista_demandas, matriz_distancias, capacidade)
+	print("CONSTRUCAO \n")
+	print(solucoes_construcao)
+	print(tempos_construcao)
+	
+	print("Média das soluções: ", mean(solucoes_construcao))
+	print("Melhor solução: ", min(solucoes_construcao))
+	print("Média do tempo: ", mean(tempos_construcao))
+	print("GAP: ", ((mean(solucoes_construcao) - 212)/212)*100)
+	
+	print("\nVND \n")
+	print(solucoes_vnd)
+	print(tempos_vnd)
+	
+	print("Média das soluções: ", mean(solucoes_vnd))
+	print("Melhor solução: ", min(solucoes_vnd))
+	print("Média do tempo: ", mean(tempos_vnd))
+	print("GAP: ", ((mean(solucoes_vnd) - 212)/212)*100)
+	
+	print("\nMETAHEURISTICA \n")
+	print(solucoes_metaheuristica)
+	print(tempos_metaheuristica)
+	
+	print("Média das soluções: ", mean(solucoes_metaheuristica))
+	print("Melhor solução: ", min(solucoes_metaheuristica))
+	print("Média do tempo: ", mean(tempos_metaheuristica))
+	print("GAP: ", ((mean(solucoes_metaheuristica) - 212)/212)*100)
 	
 
 	
@@ -154,10 +209,6 @@ def construcao_gulosa_razao(dimensao, qtd_veiculos, capacidade, lista_demandas, 
 		local_atual = 0
 		capacidade_atual = 0
 
-	#print("Construção gulosa razao:  \n")
-	#print("Distância inicial: ", funcoesGenericas.total_percorrido(rota_veiculos,matriz_distancias))
-	#print(rota_veiculos)
-	#print("\n")
 	
 	contador_clientes = 0
 	
@@ -167,16 +218,17 @@ def construcao_gulosa_razao(dimensao, qtd_veiculos, capacidade, lista_demandas, 
 			contador_clientes += 1
 	
 	print(contador_clientes)
-	
 	if contador_clientes < dimensao:
 		rota_veiculos = construcao_extra(dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias)
 	
-	print("Construção gulosa por demanda:  \n")
-	print("Distância inicial: ", funcoesGenericas.total_percorrido(rota_veiculos,matriz_distancias))
-	print(rota_veiculos)
-	print("\n")
 	
-	
+	"""
+	print("CONSTRUCAO")
+	for i in range(len(rota_veiculos)):
+		print("rota {0}: {1}".format(i,rota_veiculos[i]))
+	print("distância total percorrida: {0}\n".format(funcoesGenericas.\
+							total_percorrido(rota_veiculos,matriz_distancias)))
+	"""
 	
 	
 	return rota_veiculos
@@ -257,27 +309,35 @@ def busca_local(rota_veiculos, lista_demandas, matriz_distancias, capacidade):
 	while(not sucesso):	
 		nova_rota,sucesso = vnd(rota_veiculos,lista_demandas,matriz_distancias,capacidade)
 		#print("Tentando...\n")
+	
+	"""
+	print("VND")
+	for i in range(len(nova_rota)):
+			print("rota {0}: {1}".format(i,nova_rota[i]))
+	print("distância total percorrida: {0}\n\n".format(funcoesGenericas.\
+							total_percorrido(nova_rota,matriz_distancias)))
+	"""						
+	return nova_rota
+	
+
+
+def metaheuristica(nova_rota, lista_demandas, matriz_distancias, capacidade):
+	
 	nova_rota_2 = anelamento_simulado(nova_rota, 1000,500,50,0.75,\
 		funcoesGenericas.total_percorrido,matriz_distancias,lista_demandas,\
 			capacidade)
 	
-	for i in range(len(rota_veiculos)):
-		print("rota {0}: {1}".format(i,rota_veiculos[i]))
-	print("distância total percorrida: {0}\n".format(funcoesGenericas.\
-							total_percorrido(rota_veiculos,matriz_distancias)))
-	
-	print("Após realizar alteração")
-	for i in range(len(rota_veiculos)):
-			print("rota {0}: {1}".format(i,nova_rota[i]))
-	print("distância total percorrida: {0}\n\n".format(funcoesGenericas.\
-							total_percorrido(nova_rota,matriz_distancias)))
-
-	print("Após realizar a segunda alteração")
-	for i in range(len(rota_veiculos)):
+	"""
+	print("SIMULATED ANNEALING")
+	for i in range(len(nova_rota_2)):
 			print("rota {0}: {1}".format(i,nova_rota_2[i]))
 	print("distância total percorrida: {0}\n\n".format(funcoesGenericas.\
 							total_percorrido(nova_rota_2,matriz_distancias)))
-
+	"""
+	
+	return nova_rota_2
+			
+	
 
 
 main()
