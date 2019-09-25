@@ -12,12 +12,14 @@ def main():
 	matriz_distancias = [] # Lista com as referências das distâncias
 	
 	dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias = \
-				  funcoesGenericas.le_instancia("instancias_teste/P-n23-k8.txt")
+				  funcoesGenericas.le_instancia("instancias_teste/P-n19-k2.txt")
 	
 	#rota_veiculos = construcao_gulosa_distancia(dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias)
 	rota_veiculos = construcao_gulosa_razao(dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias)
 	
 	busca_local(rota_veiculos, lista_demandas, matriz_distancias, capacidade)
+	
+
 	
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 def construcao_gulosa_distancia(dimensao, qtd_veiculos, capacidade, lista_demandas, matriz_distancias):
@@ -174,7 +176,9 @@ def busca_local(rota_veiculos, lista_demandas, matriz_distancias, capacidade):
 	while(not sucesso):	
 		nova_rota,sucesso = vnd(rota_veiculos,lista_demandas,matriz_distancias,capacidade)
 		#print("Tentando...\n")
-	
+	nova_rota_2 = anelamento_simulado(nova_rota, 200,200,200,0.75,\
+		funcoesGenericas.total_percorrido,matriz_distancias,lista_demandas,\
+			capacidade)
 	
 	for i in range(len(rota_veiculos)):
 		print("rota {0}: {1}".format(i,rota_veiculos[i]))
@@ -187,6 +191,11 @@ def busca_local(rota_veiculos, lista_demandas, matriz_distancias, capacidade):
 	print("distância total percorrida: {0}\n\n".format(funcoesGenericas.\
 							total_percorrido(nova_rota,matriz_distancias)))
 
+	print("Após realizar a segunda alteração")
+	for i in range(len(rota_veiculos)):
+			print("rota {0}: {1}".format(i,nova_rota_2[i]))
+	print("distância total percorrida: {0}\n\n".format(funcoesGenericas.\
+							total_percorrido(nova_rota_2,matriz_distancias)))
 
 
 
