@@ -222,7 +222,7 @@ def vizinhanca_4(lista_de_rotas):
 
     # Pega o tamanho da rota
     tam_rota = len(rotas_melhoradas[indice_rota])
-    print("Tamanho: ", tam_rota)
+    #print("Tamanho: ", tam_rota)
     
     #Seleciona um indice
     indice_selecionado = random.randrange(1,tam_rota-2)

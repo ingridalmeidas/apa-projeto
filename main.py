@@ -77,11 +77,11 @@ def construcao_gulosa_distancia(dimensao, qtd_veiculos, capacidade, lista_demand
 		local_atual = 0
 		capacidade_atual = 0
 
-	print("Construção gulosa distância:  \n")
-	print("Distância inicial: ", funcoesGenericas.total_percorrido(rota_veiculos,matriz_distancias))
-	print(rota_veiculos)
-	print("\n")
-	print(clientes_visitados)
+	#print("Construção gulosa distância:  \n")
+	#print("Distância inicial: ", funcoesGenericas.total_percorrido(rota_veiculos,matriz_distancias))
+	#print(rota_veiculos)
+	#print("\n")
+	#print(clientes_visitados)
 	
 	contador_clientes = 0
 	
@@ -90,7 +90,7 @@ def construcao_gulosa_distancia(dimensao, qtd_veiculos, capacidade, lista_demand
 			#print(i)
 			contador_clientes += 1
 	
-	print(contador_clientes)
+	#print(contador_clientes)
 	
 	return rota_veiculos
 
@@ -153,10 +153,10 @@ def construcao_gulosa_razao(dimensao, qtd_veiculos, capacidade, lista_demandas, 
 		local_atual = 0
 		capacidade_atual = 0
 
-	print("Construção gulosa razao:  \n")
-	print("Distância inicial: ", funcoesGenericas.total_percorrido(rota_veiculos,matriz_distancias))
-	print(rota_veiculos)
-	print("\n")
+	#print("Construção gulosa razao:  \n")
+	#print("Distância inicial: ", funcoesGenericas.total_percorrido(rota_veiculos,matriz_distancias))
+	#print(rota_veiculos)
+	#print("\n")
 	
 	contador_clientes = 0
 	
@@ -176,7 +176,7 @@ def busca_local(rota_veiculos, lista_demandas, matriz_distancias, capacidade):
 	while(not sucesso):	
 		nova_rota,sucesso = vnd(rota_veiculos,lista_demandas,matriz_distancias,capacidade)
 		#print("Tentando...\n")
-	nova_rota_2 = anelamento_simulado(nova_rota, 200,200,200,0.75,\
+	nova_rota_2 = anelamento_simulado(nova_rota, 1000,500,50,0.75,\
 		funcoesGenericas.total_percorrido,matriz_distancias,lista_demandas,\
 			capacidade)
 	
